@@ -2,12 +2,12 @@
 	session_start();
 
 	class captcha {
-		public $image;
+		private $image;
 
 		/**
 		   Create a new captchaimage
 		*/
-		public function create($img, $font) {
+		public function create($img, $fontFoler) {
 			Header ("Content-type: image/png");
 			$this->image = ImageCreateFromPNG($img);
 			$randomText = "";
@@ -23,7 +23,7 @@
 								$this->validateX($x, $fontSize),
 								$y,
 								$this->generateRandomColor(),
-								$font,
+								$this->generateRandomFont($fontFoler),
 								$char
 				);
 				$randomText .= $char;
@@ -42,15 +42,25 @@
 		}
 		
 		/**
+			Generate a random font
+		*/
+		private function generateRandomFont($directory) {
+			$fonts = glob($directory . "*.ttf");
+			
+			//echo $fonts[rand(0, count($fonts)-1)];
+			return $fonts[rand(0, count($fonts)-1)];
+		}
+		
+		/**
 			Gernerate a random color
 		*/
-		public function generateRandomColor() {
+		private function generateRandomColor() {
 			return ImageColorAllocate($this->image, rand(1, 255), rand(1, 255), rand(1, 255));
 		}
 		/**
 			Generate a random Char
 		*/
-		public function generateRandomChar() {
+		private function generateRandomChar() {
 			$charPool = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890!?+=";
 			return $charPool[rand(0, strlen($charPool)-1)];
 		}
